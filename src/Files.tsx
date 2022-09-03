@@ -1,9 +1,15 @@
 import type { Component} from 'solid-js';
 import { For } from 'solid-js';
 
-const Files: Component = () => {
-  const files = ["Test File.mid", "Super Mario Bros.mid"];
-  
+interface FilesProps {
+  files?: string[],
+  onPlay: (fileName: string) => void,
+  onQueue: (fileName: string) => void,
+  onDownload: (fileName: string) => void,
+  onDelete: (fileName: string) => void,
+}
+
+const Files: Component<FilesProps> = (props: FilesProps) => {
   return (
     <div class="w-full">
       <table class="table table-compact table-zebra w-full">
@@ -19,8 +25,8 @@ const Files: Component = () => {
           </tr>
         </thead>
         <tbody>
-          <For each={files}>
-            { (file, i) =>
+          <For each={props.files}>
+            { (file) =>
               <tr>
                 <th>
                   <label>
@@ -47,10 +53,16 @@ const Files: Component = () => {
                       </svg>
                     </label>
                     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                      <li><a>Play</a></li>
-                      <li><a>Add to queue</a></li>
-                      <li><a>Download</a></li>
-                      <li><a class="btn btn-outline btn-error">Delete</a></li>
+                      <li><a onClick={ () => props.onPlay(file) }>Play</a></li>
+                      <li><a onClick={ () => props.onQueue(file) }>Add to queue</a></li>
+                      <li><a onClick={ () => props.onDownload(file) }>Download</a></li>
+                      <li>
+                        <a
+                          onClick={ () => props.onDelete(file) }
+                          class="btn btn-outline btn-error">
+                          Delete
+                        </a>
+                      </li>
                     </ul>
                   </div>
                 </th>
