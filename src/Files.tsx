@@ -11,15 +11,15 @@ interface FilesProps {
 
 const Files: Component<FilesProps> = (props: FilesProps) => {
   return (
-    <div class="w-full">
+    <div class="w-full overflow-y-auto overscroll-y-none h-full">
       <table class="table table-compact table-zebra w-full">
         <thead>
           <tr>
-            <th>
+            { /*}<th>
               <label>
-                <input type="checkbox" class="checkbox checkbox-xs" />
+                <input type="checkbox" class="checkbox checkbox-xs z-0" />
               </label>
-            </th>
+            </th>*/ }
             <th>File Name</th>
             <th></th>
           </tr>
@@ -27,12 +27,12 @@ const Files: Component<FilesProps> = (props: FilesProps) => {
         <tbody>
           <For each={props.files}>
             { (file) =>
-              <tr>
-                <th>
+              <tr onDblClick={ () => props.onPlay(file) }>
+                { /*<th>
                   <label>
-                    <input type="checkbox" class="checkbox checkbox-xs" />
+                    <input type="checkbox" class="checkbox checkbox-xs z-0" />
                   </label>
-                </th>
+                </th> */ }
                 <td>{ file }</td>
                 <th>
                   <div class="dropdown dropdown-end">

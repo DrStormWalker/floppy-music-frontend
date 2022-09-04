@@ -11,8 +11,8 @@ interface ControlsProps {
 const Controls: Component<ControlsProps> = (props: ControlsProps) => {
   return (
     <div class="flex justify-center items-center flex-col gap-6 h-full">
-      <div class="text-center">
-        { props.file }
+      <div class="text-center whitespace-pre">
+        { props.file ?? " " }
       </div>
       <div class="flex justify-center items-center gap-4">
         <button onClick={ () => props.onBackward() }>
