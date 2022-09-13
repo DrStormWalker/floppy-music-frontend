@@ -11,6 +11,7 @@ const API_V1_EVENTS_PANEL = "/api/v1/events/panel";
 const API_V1_STATUS = "/api/v1/status";
 const API_V1_RESUME = "/api/v1/resume";
 const API_V1_PAUSE = "/api/v1/pause";
+const API_V1_PLAY_MSG = "/api/v1/play/msg"
 
 const Panel: Component = () => {
   const [ playing, setPlaying ] = createSignal(false);
@@ -19,6 +20,8 @@ const Panel: Component = () => {
   const [ files, setFiles ] = createSignal([ ]);
 
   const [ filePlaying, setFilePlaying ] = createSignal(files()[0]);
+  
+  const [ error, setError ] = createSignal("");
   
   onMount(() => {
     function fetchFiles() {     
@@ -67,6 +70,41 @@ const Panel: Component = () => {
     fetchFiles();
     fetchPlaying();
     fetchStatus();
+    
+    window.addEventListener("focus", () => {
+      fetchFiles();
+      fetchPlaying();
+      fetchStatus();
+    }, false);
+    
+    if (navigator.requestMIDIAccess === undefined) {
+      console.log("MIDI access not available");
+    } else {
+      navigator.requestMIDIAccess()
+        .then(access => {
+          for (const entry of access.inputs) {
+            const input = entry[1];
+            console.log(`Input port [type:'${input.type}']` +
+              ` id:'${input.id}'` +
+              ` manufacturer:'${input.manufacturer}'` +
+              ` name:'${input.name}'` +
+              ` version:'${input.version}'`);
+          }
+          
+          access.inputs.forEach(entry => entry.onmidimessage = event => {
+            console.log(event.data);
+            fetch(API_V1_PLAY_MSG, {
+              method: "POST",
+              body: event.data,
+            })
+              .catch(e => {
+                console.log(e);
+              })
+          })
+        }, err => {
+          console.log(err);
+        });
+    }
       
     let panelEvents = new EventSource(API_V1_EVENTS_PANEL);
     
@@ -84,6 +122,11 @@ const Panel: Component = () => {
           fetchStatus();
           break;
       }
+    };
+    
+    panelEvents.onerror = function(err) {
+      setError(err);
+      console.log(err);
     };
   });
   
