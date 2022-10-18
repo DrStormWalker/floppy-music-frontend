@@ -1,4 +1,5 @@
-import { Component, Show } from "solid-js";
+import { Component, Show, onMount } from "solid-js";
+import * as Mousetrap from "mousetrap";
 
 interface ControlsProps {
   file?: string,
@@ -6,9 +7,14 @@ interface ControlsProps {
   onPlayPause: () => void,
   onForward: () => void,
   onBackward: () => void,
+  onStop: () => void,
 }
 
 const Controls: Component<ControlsProps> = (props: ControlsProps) => {
+  onMount(() => {
+    Mousetrap.bind("g", () => props.onPlayPause());
+  });
+
   return (
     <div class="flex justify-center items-center flex-col gap-6 h-full">
       <div class="text-center whitespace-pre">
@@ -66,6 +72,21 @@ const Controls: Component<ControlsProps> = (props: ControlsProps) => {
             </svg>
           </Show>
         </label>
+    
+        <button onClick={ () => props.onStop() }>
+          <svg
+            class="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor" 
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.5 7.5a3 3 0 013-3h9a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
 
         <button onClick={ () => props.onForward() }>
           <svg

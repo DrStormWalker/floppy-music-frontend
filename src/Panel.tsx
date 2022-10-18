@@ -3,15 +3,18 @@ import Files from './Files';
 import Controls from "./Controls";
 import Navbar from "./Navbar";
 
-const API_V1_FILES = "/api/v1/files";
-const API_V1_FILE = "/api/v1/file";
-const API_V1_PLAY = "/api/v1/play";
-const API_V1_PLAYING = "/api/v1/playing";
-const API_V1_EVENTS_PANEL = "/api/v1/events/panel";
-const API_V1_STATUS = "/api/v1/status";
-const API_V1_RESUME = "/api/v1/resume";
-const API_V1_PAUSE = "/api/v1/pause";
-const API_V1_PLAY_MSG = "/api/v1/play/msg"
+const API_V1_ROOT = "/api/v1"
+const API_V1_FILES = `${API_V1_ROOT}/files`;
+const API_V1_FILE = `${API_V1_ROOT}/file`;
+const API_V1_PLAY = `${API_V1_ROOT}/play`;
+const API_V1_PLAYING = `${API_V1_ROOT}/playing`;
+const API_V1_EVENTS_PANEL = `${API_V1_ROOT}/events/panel`;
+const API_V1_EVENTS_LOGS = `${API_V1_ROOT}/events/logs`;
+const API_V1_STATUS = `${API_V1_ROOT}/status`;
+const API_V1_RESUME = `${API_V1_ROOT}/resume`;
+const API_V1_PAUSE = `${API_V1_ROOT}/pause`;
+const API_V1_STOP = `${API_V1_ROOT}/stop`;
+const API_V1_PLAY_MSG = `${API_V1_ROOT}/play/msg`
 
 const Panel: Component = () => {
   const [ playing, setPlaying ] = createSignal(false);
@@ -128,6 +131,19 @@ const Panel: Component = () => {
       setError(err);
       console.log(err);
     };
+    
+    let logEvents = new EventSource(API_V1_EVENTS_LOGS);
+    
+    logEvents.onmessage = function(event) {
+      let data = event.data;
+      
+      console.log(data);
+    }
+    
+    logEvents.onerror = function(event) {
+      setError(err);
+      console.log(err);
+    }
   });
   
   function playFile(filename: string) {
@@ -164,6 +180,13 @@ const Panel: Component = () => {
       })
   }
   
+  function stopPlaying() {
+    fetch(API_V1_STOP)
+      .catch(e => {
+        console.log(e);
+      })
+  }
+  
   return (
     <div class="flex flex-col h-full">
       <div class="flex-none">
@@ -194,6 +217,7 @@ const Panel: Component = () => {
                   file={ filePlaying() }
                   playing={ playing() }
                   onPlayPause={ () => playing() ? pausePlaying() : resumePlaying() }
+                  onStop={ () => stopPlaying() }
                   onForward={ () => {} }
                   onBackward={ () => {} }
                 />
