@@ -2,9 +2,9 @@ import type { Component } from "solid-js";
 
 const Login: Component = () => {
   return (
-    <div class="p-2 flex justify-center items-center h-full bg-neutral">
+    <div class="p-2 flex justify-center items-center h-full bg-neutral h-screen">
       <form
-        class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100"
+        class="card flex-shrink-0 w-full max-w-sm shadow-2xl"
         method="post"
         action="/api/v1/login"
       >

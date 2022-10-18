@@ -1,4 +1,4 @@
-import { Component, createSignal, createEffect, onMount } from "solid-js";
+import { Component, Show, createSignal, createEffect, onMount } from "solid-js";
 import Files from './Files';
 import Controls from "./Controls";
 import Navbar from "./Navbar";
@@ -195,34 +195,26 @@ const Panel: Component = () => {
           onMenuToggle={ () => setMenuShown(menuShown => !menuShown) }
         />
       </div>
-      <div class="grow drawer drawer-mobile drawer-end lg:!auto-cols-max-auto h-0">
-        <input id="files-drawer" type="checkbox" class="drawer-toggle" checked={ menuShown() } />
-        <div class="drawer-content flex flex-col">
-        </div>
-        <div class="drawer-side h-full">
-          <label for="files-drawer" class="drawer-overlay"></label>
-          <div class="menu lg:w-2/5 w-full bg-base-100 text-base-content">
-            <div class="flex flex-col h-full">
-              <div class="p-4 grow h-0">
-                <Files
-                  files={ files() }
-                  onPlay={ file => playFile(file) }
-                  onQueue={ () => {} }
-                  onDownload={ file => downloadFile(file) }
-                  onDelete={ () => {} }
-                />
-              </div>
-              <div class="flex-none md:h-48 h-32 bg-neutral mt-auto lg:rounded-tl-lg lg:rounded-t-none rounded-t-lg z-50">
-                <Controls
-                  file={ filePlaying() }
-                  playing={ playing() }
-                  onPlayPause={ () => playing() ? pausePlaying() : resumePlaying() }
-                  onStop={ () => stopPlaying() }
-                  onForward={ () => {} }
-                  onBackward={ () => {} }
-                />
-              </div>
-            </div>
+      <div class="menu lg:w-2/5 w-full bg-base-100 text-base-content">
+        <div class="flex flex-col h-full">
+          <div class="p-4 grow shrink basis-auto">
+            <Files
+              files={ files() }
+              onPlay={ file => playFile(file) }
+              onQueue={ () => {} }
+              onDownload={ file => downloadFile(file) }
+              onDelete={ () => {} }
+            />
+          </div>
+          <div class="shrink md:h-48 h-32 bg-neutral mt-auto lg:rounded-tl-lg lg:rounded-t-none rounded-t-lg z-50">
+            <Controls
+              file={ filePlaying() }
+              playing={ playing() }
+              onPlayPause={ () => playing() ? pausePlaying() : resumePlaying() }
+              onStop={ () => stopPlaying() }
+              onForward={ () => {} }
+              onBackward={ () => {} }
+            />
           </div>
         </div>
       </div>

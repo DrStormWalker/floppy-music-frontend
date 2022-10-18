@@ -11,7 +11,7 @@ interface FilesProps {
 
 const Files: Component<FilesProps> = (props: FilesProps) => {
   return (
-    <div class="w-full overflow-y-auto overscroll-y-none h-full">
+    <div class="w-full overflow-y-scroll overscroll-y-none h-full">
       <table class="table table-compact table-zebra w-full">
         <thead>
           <tr>
